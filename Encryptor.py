@@ -11,9 +11,9 @@ from os import path
 def not_empty(string):
     return string != None and string != ''
 
-def error_info(title, msg):
+def show_info(title, msg, return_info='Program abort'):
     messagebox.showinfo(title, msg)
-    return 'Program abort'
+    return return_info
 
 def print_no_newline(string):
     print(string, end='', flush=True)
@@ -21,7 +21,7 @@ def print_no_newline(string):
 dest_root = tkinter.Tk()
 dest_root.withdraw()
 destination = filedialog.askdirectory(parent=dest_root, title='Choose destination directory')
-assert not_empty(destination), error_info('Error', 'Destination directory not selected')
+assert not_empty(destination), show_info('Error', 'Destination directory not selected')
 
 files_root = tkinter.Tk()
 files_root.withdraw()
@@ -30,8 +30,8 @@ assert not_empty(files), error_into('Error', 'Files to be encrypted not selected
 to_encrypt_list = files_root.tk.splitlist(files)
 
 key = simpledialog.askstring('Password', 'Enter password (8 characters): ', show='*')
-assert not_empty(key), error_info('Error', 'Password not entered')
-assert len(key) == 8, error_info('Error', 'Password is not 8 characters')
+assert not_empty(key), show_info('Error', 'Password not entered')
+assert len(key) == 8, show_info('Error', 'Password is not 8 characters')
 des = pyDes.des(key, padmode=pyDes.PAD_PKCS5)
 
 prev_length = 0
@@ -51,7 +51,7 @@ for to_encrypt in to_encrypt_list:
     print_no_newline('\b' * prev_length)
     progress = '=' * int(total * 100) + '>' + ' {:.2%}'.format(total)
     print_no_newline(progress)
-print('\nEncryption completed')
+print('\n' + show_info('Finished successfully', 'Encryption complete!', 'Finished successfully'))
 
 dest_root.destroy()
 files_root.destroy()
